@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Move : MonoBehaviour
 {
-    
 
+    public Text health;
     public Animator animator;
     public Rigidbody2D rb;
 
@@ -15,10 +16,19 @@ public class Move : MonoBehaviour
     private bool facingRight = true;
     private float movement;
 
-    
+
+
+    void Start()
+    {
+        rb= GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        
+    }
 
     void Update()
     {
+        
+
         // Horizontal movement
         movement = Input.GetAxis("Horizontal");
 
