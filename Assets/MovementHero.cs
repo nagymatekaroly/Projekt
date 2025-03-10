@@ -15,6 +15,8 @@ public class Move : MonoBehaviour
     private bool facingRight = true;
     private float movement;
 
+    
+
     void Update()
     {
         // Horizontal movement
@@ -23,7 +25,7 @@ public class Move : MonoBehaviour
         // Facing direction
         if (movement < 0f && facingRight)
         {
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
+            transform.eulerAngles = new Vector3(0f, -180f, 0f);
             facingRight = false;
         }
         else if (movement > 0f && !facingRight)
@@ -41,7 +43,12 @@ public class Move : MonoBehaviour
         }
 
         // Walk animation
-        animator.SetFloat("Walk", Mathf.Abs(movement));
+        if (Mathf.Abs(movement) > .1f) {
+            animator.SetFloat("Walk", 1f);
+        }
+        else if ((movement) < .1f) {
+            animator.SetFloat("Walk", 0f);
+        }
 
         // Attack animation
         if (Input.GetKeyDown(KeyCode.K))
@@ -63,7 +70,7 @@ public class Move : MonoBehaviour
 
     void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpHeight);
+        rb.AddForce(new Vector2(0f, jumpHeight), ForceMode2D.Impulse);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
