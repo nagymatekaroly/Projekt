@@ -1,10 +1,8 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Move : MonoBehaviour
 {
-
-    public Text health;
     public Animator animator;
     public Rigidbody2D rb;
 
@@ -16,16 +14,24 @@ public class Move : MonoBehaviour
     private bool facingRight = true;
     private float movement;
 
+    // Dash változók
+    public float dashSpeed = 10f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
+
+    private bool canDash = true;
+    private bool isDashing = false;
+
     void Start()
     {
-        rb= GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        
     }
 
     void Update()
     {
-        
+        // Ha dash közben van, ne engedje a mozgást
+        if (isDashing) return;
 
         // Horizontal movement
         movement = Input.GetAxis("Horizontal");
@@ -51,28 +57,29 @@ public class Move : MonoBehaviour
         }
 
         // Walk animation
-        if (Mathf.Abs(movement) > .1f) {
-            animator.SetFloat("Walk", 1f);
-        }
-        else if ((movement) < .1f) {
-            animator.SetFloat("Walk", 0f);
-        }
+        animator.SetFloat("Walk", Mathf.Abs(movement));
 
         // Attack animation
         if (Input.GetKeyDown(KeyCode.K))
         {
             animator.SetTrigger("Attack");
         }
+
+        // Dash külön gombra (például L)
+        if (Input.GetKeyDown(KeyCode.L) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
     }
 
     private void FixedUpdate()
     {
+        if (isDashing) return; // Ha dash-ben van, ne változtasson a mozgáson
+
         // Move using Rigidbody
         rb.linearVelocity = new Vector2(movement * movementSpeed, rb.linearVelocity.y);
 
         // Ground detection
-       
-        // Fix stuck jump animation
         animator.SetBool("Jump", !isGround);
     }
 
@@ -92,10 +99,34 @@ public class Move : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Coin")) 
+        if (other.gameObject.CompareTag("Coin"))
         {
             Destroy(other.gameObject);
             cm.coinCount++;
         }
+    }
+
+    IEnumerator Dash()
+    {
+        canDash = false;
+        isDashing = true;
+
+        animator.SetBool("isDashing", true); // Dash animáció bekapcsolása
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0; // Gravitáció kikapcsolása dash alatt
+
+        float dashDirection = facingRight ? 1f : -1f; // Irány meghatározása
+        rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0f); // Dash előre
+
+        yield return new WaitForSeconds(dashDuration); // Dash időtartama
+
+        rb.gravityScale = originalGravity; // Gravitáció visszaállítása
+        rb.linearVelocity = Vector2.zero; // Mozgás leállítása
+        isDashing = false;
+
+        animator.SetBool("isDashing", false); // Dash animáció kikapcsolása
+
+        yield return new WaitForSeconds(dashCooldown); // Cooldown
+        canDash = true;
     }
 }
