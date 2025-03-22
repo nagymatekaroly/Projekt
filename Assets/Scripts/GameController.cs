@@ -27,9 +27,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-   
 
-    public void UpdateCheckpoint(Vector3 pos) 
+
+    public void UpdateCheckpoint(Vector3 pos)
     {
         checkpointPos = pos;
     }
