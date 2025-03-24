@@ -9,7 +9,7 @@ public class GameSettings : MonoBehaviour
         Application.targetFrameRate = 30;
 
         // Set resolution to 1920x1080, windowed mode
-        Screen.SetResolution(640, 480, false);
+        Screen.SetResolution(1920, 1080, false);
 
     }
 

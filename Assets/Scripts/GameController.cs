@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -27,6 +28,10 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        Debug.Log("TimeScale: " + Time.timeScale);
+    }
 
 
     public void UpdateCheckpoint(Vector3 pos)
