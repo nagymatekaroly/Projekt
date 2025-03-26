@@ -112,8 +112,7 @@ public class Move : MonoBehaviour
     {
         canDash = false;
         isDashing = true;
-
-        animator.SetBool("isDashing", true); // Dash animáció bekapcsolása
+        //animator.SetBool("isDashing", true); // Dash animáció bekapcsolása
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0; // Gravitáció kikapcsolása dash alatt
 
@@ -126,7 +125,7 @@ public class Move : MonoBehaviour
         rb.linearVelocity = Vector2.zero; // Mozgás leállítása
         isDashing = false;
 
-        animator.SetBool("isDashing", false); // Dash animáció kikapcsolása
+        // animator.SetBool("isDashing", false); // Dash animáció kikapcsolása
 
         yield return new WaitForSeconds(dashCooldown); // Cooldown
         canDash = true;

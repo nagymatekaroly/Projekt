@@ -30,8 +30,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        // Folyamatosan figyeljük a TimeScale-t debughoz
-        Debug.Log("⏱ TimeScale: " + Time.timeScale);
+       
     }
 
     public void UpdateCheckpoint(Vector2 pos)
