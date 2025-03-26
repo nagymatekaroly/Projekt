@@ -112,6 +112,7 @@ public class AuthManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(json)) return null;
 
+
         try
         {
             var errorObj = JsonUtility.FromJson<ServerError>(json);

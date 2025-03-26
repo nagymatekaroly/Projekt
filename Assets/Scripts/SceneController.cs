@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviour 
+public class SceneController : MonoBehaviour
 {
     public static SceneController instance;
 
@@ -12,19 +12,19 @@ public class SceneController : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-
-        else 
+        else
         {
             Destroy(gameObject);
         }
     }
-    public void NextLevel() 
+
+    public void NextLevel()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void LoadScene(string sceneName) 
+    public void LoadScene(string sceneName)
     {
         SceneManager.LoadSceneAsync(sceneName);
     }
-}   
+}

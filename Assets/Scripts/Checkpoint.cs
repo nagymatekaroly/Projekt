@@ -1,19 +1,40 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    GameController gameController;
+    private GameController gameController;
     public Transform respawnPoint;
+
+    private SpriteRenderer spriteRenderer;
+    public Sprite passive, active;
+    private Collider2D coll;
+
     private void Awake()
     {
-        gameController = GameObject.FindGameObjectWithTag("Player").GetComponent<GameController>();
+        gameController = GameObject.FindGameObjectWithTag("Player")?.GetComponent<GameController>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        coll = GetComponent<Collider2D>();
+
+        if (gameController == null)
+        {
+           
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            gameController.UpdateCheckpoint(respawnPoint.position);
+           
+            if (gameController != null)
+            {
+                gameController.UpdateCheckpoint(respawnPoint.position);
+            }
+
+            // Ha nem akarsz aktív-passzív animációt:
+            // spriteRenderer.sprite = active;
+            // coll.enabled = false;
         }
     }
 }

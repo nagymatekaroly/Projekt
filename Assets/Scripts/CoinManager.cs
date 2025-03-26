@@ -7,13 +7,15 @@ public class CoinManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Time.timeScale = 1f;
-        Debug.Log("🔥 TimeScale resetelve: " + Time.timeScale);
+    
     }
 
     // Update is called once per frame
     void Update()
     {
-        coinText.text = "High Score: " + coinCount.ToString();
+        if (coinText != null)
+        {
+            coinText.text = "High Score: " + coinCount.ToString();
+        }
     }
 }

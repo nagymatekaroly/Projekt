@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 5114305143734167516}
   - component: {fileID: 5227311198503493202}
   - component: {fileID: 7350341071498586073}
+  - component: {fileID: 2729811302536712085}
   - component: {fileID: 5847705901649536944}
   m_Layer: 0
   m_Name: Hero
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,13 +153,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a3b22390d0db345ba4d2a860790d9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 0}
   animator: {fileID: 5114305143734167516}
   rb: {fileID: 5227311198503493202}
-  maxHealth: 3
-  jumpHeight: 20
+  jumpHeight: 15
   isGround: 1
-  movementSpeed: 8
+  movementSpeed: 3
+  cm: {fileID: 0}
+  dashSpeed: 10
+  dashDuration: 0.2
+  dashCooldown: 1
+--- !u!114 &2729811302536712085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548689396091645979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b2662bd172efc409463ef1909f5b8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!61 &5847705901649536944
 BoxCollider2D:
   m_ObjectHideFlags: 0

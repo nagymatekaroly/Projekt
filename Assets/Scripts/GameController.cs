@@ -1,55 +1,64 @@
 using System.Collections;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    Vector3 checkpointPos;
+    Vector2 checkpointPos;
     Rigidbody2D playerRb;
-    Vector3 originalScale; // T�roljuk az eredeti m�retet
+    Vector3 originalScale; // Eredeti méret mentése
 
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
-        originalScale = transform.localScale; // Eredeti m�ret ment�se
+        originalScale = transform.localScale;
     }
 
     private void Start()
     {
-        checkpointPos = transform.position;
+        checkpointPos = transform.position; // Alap checkpoint a kezdőpozíció
+        Debug.Log("✅ Kezdő checkpoint pozíció beállítva: " + checkpointPos);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Obstacle"))
         {
+            Debug.Log("❌ Ütközés az akadállyal: " + collision.gameObject.name);
             Die();
-            Debug.Log("Collided with: " + collision.gameObject.name);
         }
     }
 
     void Update()
     {
-        Debug.Log("TimeScale: " + Time.timeScale);
+        // Folyamatosan figyeljük a TimeScale-t debughoz
+        Debug.Log("⏱ TimeScale: " + Time.timeScale);
     }
 
-
-    public void UpdateCheckpoint(Vector3 pos)
+    public void UpdateCheckpoint(Vector2 pos)
     {
         checkpointPos = pos;
+        Debug.Log("✅ Checkpoint frissítve: " + checkpointPos);
     }
+
     void Die()
     {
+        Debug.Log("💀 Meghaltál, respawn indul...");
         StartCoroutine(Respawn(0.5f));
     }
+
     IEnumerator Respawn(float duration)
     {
         playerRb.simulated = false;
-        playerRb.linearVelocity = Vector3.zero;
-        transform.localScale = Vector3.zero; // Null�ra cs�kkentj�k a m�retet
+        playerRb.linearVelocity = Vector2.zero;
+        transform.localScale = Vector3.zero;
+
         yield return new WaitForSeconds(duration);
+
+        // Visszaállítjuk a mentett checkpoint pozícióra
         transform.position = checkpointPos;
-        transform.localScale = originalScale; // **Az eredeti m�retet �ll�tjuk vissza!**
+        transform.localScale = originalScale;
         playerRb.simulated = true;
+
+        Debug.Log($"⚠️ Respawn indult. Checkpoint pozíció: {checkpointPos}");
     }
 }

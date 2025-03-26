@@ -102,9 +102,11 @@ public class Move : MonoBehaviour
         if (other.gameObject.CompareTag("Coin"))
         {
             Destroy(other.gameObject);
-            cm.coinCount++;
+            cm.coinCount += 100;
         }
     }
+
+
 
     IEnumerator Dash()
     {
