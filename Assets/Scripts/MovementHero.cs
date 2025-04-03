@@ -24,8 +24,14 @@ public class Move : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        if (cm == null)
+        {
+            cm = FindObjectOfType<CoinManager>();
+            if (cm == null)
+            {
+                Debug.LogError("❌ CoinManager nem található MovementHero-ban!");
+            }
+        }
     }
 
     void Update()
@@ -97,12 +103,14 @@ public class Move : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Coin"))
+        Debug.Log("Ütközés történt: " + other.gameObject.name);
+
+        if (other.CompareTag("Coin"))
         {
             Destroy(other.gameObject);
-            cm.coinCount += 100;
+            cm.AddCoin(100); // vagy cm.coinCount += 100
         }
     }
 

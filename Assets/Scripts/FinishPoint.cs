@@ -9,6 +9,46 @@ public class FinishPoint : MonoBehaviour
     public CoinManager coinManager;           // 🎯 Inspectorban húzd be!
     public Text feedbackText;                 // 🎉 UI Text a visszajelzéshez
 
+    void Awake()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (!(currentScene.Contains("Level") || currentScene == "Tutorial"))
+        {
+            gameObject.SetActive(false); // Kikapcsolja magát, ha nem szinten vagyunk
+        }
+    }
+
+    void Start()
+    {
+        StartCoroutine(FindCoinManagerAfterDelay());
+    }
+
+    IEnumerator FindCoinManagerAfterDelay()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (currentScene.Contains("Level") || currentScene == "Tutorial")
+        {
+            // Várjunk pár frame-et (pl. 0.2 másodpercet), hogy CoinManager biztosan betöltődjön
+            yield return new WaitForSeconds(0.2f);
+
+            coinManager = FindObjectOfType<CoinManager>();
+
+            if (coinManager == null)
+            {
+                Debug.LogError("❌ CoinManager továbbra is NULL a FinishPointban!");
+            }
+            else
+            {
+                Debug.Log("✅ CoinManager megtalálva a FinishPoint által.");
+            }
+        }
+    }
+
+
+
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
