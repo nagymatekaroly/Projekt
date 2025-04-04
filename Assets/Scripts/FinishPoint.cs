@@ -8,6 +8,8 @@ public class FinishPoint : MonoBehaviour
 {
     public CoinManager coinManager;           // 🎯 Inspectorban húzd be!
     public Text feedbackText;                 // 🎉 UI Text a visszajelzéshez
+    public GameObject finishPanel;       // Inspectorból behúzod a FinishPanel GameObjectet
+   
 
     void Awake()
     {
@@ -95,16 +97,30 @@ public class FinishPoint : MonoBehaviour
             string response = request.downloadHandler.text;
             Debug.Log("✅ Highscore elküldve! Válasz: " + response);
 
-            // 🔍 Visszajelzés szöveg – ha új rekord volt, ezt mondja
-            if (response.Contains("saved"))
+            // 🎉 Megjelenítjük a gratulációs ablakot
+            if (finishPanel != null)
             {
-                if (feedbackText != null)
-                    feedbackText.text += "\n🏆 New Highscore!";
-            }
+                finishPanel.SetActive(true);
 
-            // 🔄 2 másodperc után vissza LevelSelectScene-re
-            yield return new WaitForSeconds(2f);
-            SceneManager.LoadScene("LevelSelectScene");
+                if (feedbackText != null)
+                {
+                    feedbackText.text = "🎉 Gratulálok!\nPontszámod: " + coinManager.coinCount;
+
+                    if (response.Contains("saved"))
+                    {
+                        feedbackText.text += "\n🏆 Új highscore!";
+                    }
+                }
+
+                yield return new WaitForSeconds(3f); // idő a gratulációs ablaknak
+                SceneManager.LoadScene("LevelSelectScene");
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ Nincs FinishPanel beállítva – fallback visszadobás");
+                yield return new WaitForSeconds(2f);
+                SceneManager.LoadScene("LevelSelectScene");
+            }
         }
         else
         {
@@ -112,6 +128,7 @@ public class FinishPoint : MonoBehaviour
             Debug.LogError(request.downloadHandler.text);
         }
     }
+
 
     [System.Serializable]
     public class HighscorePostDto
