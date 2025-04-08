@@ -19,16 +19,9 @@ public class FinishPoint : MonoBehaviour
         }
     }
 
-   
-   void Start()
+    void Start()
     {
         StartCoroutine(FindCoinManagerAfterDelay());
-
-        if (feedbackText != null)
-            feedbackText.text = ""; // reset minden pályakezdéskor
-
-        if (finishPanel != null)
-            finishPanel.SetActive(false);
     }
 
     IEnumerator FindCoinManagerAfterDelay()
@@ -49,7 +42,6 @@ public class FinishPoint : MonoBehaviour
             {
                 Debug.Log("✅ CoinManager megtalálva a FinishPoint által.");
 
-                // 🔄 Highscore szöveg frissítése mindig a legfrissebb értékkel
                 if (coinManager.coinText == null)
                 {
                     GameObject found = GameObject.Find("CoinCount");
@@ -73,13 +65,33 @@ public class FinishPoint : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("🎯 Finish elérve – Highscore lekérés és küldés indul...");
+            if (coinManager == null)
+            {
+                coinManager = FindObjectOfType<CoinManager>();
+                Debug.LogWarning("♻️ Újra lekérve a CoinManager, mert NULL volt triggerkor.");
+            }
+
+            Debug.Log("🎯 Finish elérve – Highscore küldés indul. Aktuális pont: " + (coinManager != null ? coinManager.coinCount.ToString() : "NULL"));
+
+            if (feedbackText != null)
+                feedbackText.text = "🎉 Congratulations!";
+
             StartCoroutine(CheckAndSubmitHighScore());
         }
     }
 
     IEnumerator CheckAndSubmitHighScore()
     {
+        if (coinManager == null)
+        {
+            coinManager = FindObjectOfType<CoinManager>();
+            if (coinManager == null)
+            {
+                Debug.LogError("❌ CoinManager nem található még mindig – highscore megszakítva.");
+                yield break;
+            }
+        }
+
         string levelName = SceneManager.GetActiveScene().name;
         int currentScore = coinManager != null ? coinManager.coinCount : 0;
         int previousScore = -1;
@@ -148,18 +160,13 @@ public class FinishPoint : MonoBehaviour
                 if (feedbackText != null)
                 {
                     feedbackText.text = "🎉 Szép munka!\nPontszámod: " + currentScore;
-
-                    if (previousScore == -1)
-                    {
-                        feedbackText.text += "\n🆕 Ez az első highscore ezen a pályán!";
-                    }
-                    else if (currentScore > previousScore)
+                    if (previousScore >= 0 && currentScore > previousScore)
                     {
                         feedbackText.text += "\n🔥 ÚJ REKORD! Te vagy a király ezen a pályán!";
                     }
-                    else
+                    else if (previousScore == -1)
                     {
-                        feedbackText.text += "\n👑 Jelenlegi rekord: " + previousScore;
+                        feedbackText.text += "\n🆕 Ez az első highscore ezen a pályán!";
                     }
                 }
 

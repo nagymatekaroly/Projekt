@@ -13,10 +13,17 @@ public class CoinManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            Debug.Log("✅ CoinManager beállítva.");
+            string sceneName = SceneManager.GetActiveScene().name;
+            if (sceneName.StartsWith("Level") || sceneName == "Tutorial")
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+                Debug.Log("✅ CoinManager beállítva.");
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         else
         {
@@ -24,24 +31,10 @@ public class CoinManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        // Fontos: eltávolítjuk az eseményt, hogy ne legyen dupla hívás
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        // Csak akkor nullázunk, ha valóban pályaszintre lépünk
-        if (scene.name.StartsWith("Level") || scene.name == "Tutorial")
-        {
-            coinCount = 0;
-            UpdateText();
-        }
-    }
-
     void Start()
     {
+        coinCount = 0;
+
         if (coinText == null)
         {
             GameObject found = GameObject.Find("CoinCount");
@@ -71,5 +64,11 @@ public class CoinManager : MonoBehaviour
         {
             coinText.text = "High Score: " + coinCount.ToString();
         }
+    }
+
+    public void ResetCoins()
+    {
+        coinCount = 0;
+        UpdateText();
     }
 }
