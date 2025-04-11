@@ -4,65 +4,85 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class HighScoreManager : MonoBehaviour
+public class HighscoreManager : MonoBehaviour
 {
-    public string highScoreUrl = "https://mudskipdb.onrender.com/api/Highscore/my-highscores";
+    [Header("Saját highscore-ok UI")]
+    public Transform myHighscoreParent;
+    public GameObject myHighscoreRowPrefab;
 
-    public Transform highscoreContent;        // Ez legyen egy üres GameObject (pl. HighscoreContent)
-    public GameObject highscoreRowPrefab;     // A sor prefabod (benne LevelText + ScoreText)
+    [Header("API URL")]
+    public string baseUrl = "https://mudskipdb.onrender.com/api/Highscore";
 
     [System.Serializable]
-    public class HighScoreEntry
+    public class MyHighscoreDto
     {
         public string levelName;
         public int highscore;
     }
 
     [System.Serializable]
-    public class HighScoreList
+    public class MyHighscoreDtoList
     {
-        public List<HighScoreEntry> highscores;
+        public List<MyHighscoreDto> items;
     }
 
-    // 🔥 Ezt hívja a GOMB
-    public void LoadHighScoresButton()
+    public void OnFetchMyHighscoresButtonPressed()
     {
-        StartCoroutine(LoadHighScores());
-    }
-
-    IEnumerator LoadHighScores()
-    {
-        // 🔥 MINDIG kezdjünk egy biztonságos takarítással!
-        foreach (Transform child in highscoreContent)
+        Debug.Log("📥 FetchMyHighscores gomb megnyomva.");
+        if (string.IsNullOrEmpty(baseUrl))
         {
-            Destroy(child.gameObject);
+            Debug.LogError("❌ baseUrl nincs beállítva!");
+            return;
+        }
+        if (myHighscoreParent == null || myHighscoreRowPrefab == null)
+        {
+            Debug.LogError("❌ UI elemek nincsenek beállítva (parent vagy prefab)!");
+            return;
         }
 
-        UnityWebRequest request = UnityWebRequest.Get(highScoreUrl);
+        Debug.Log("🔁 FetchMyHighscores coroutine indítása...");
+        StartCoroutine(FetchMyHighscores());
+    }
+
+    IEnumerator FetchMyHighscores()
+    {
+        string url = $"{baseUrl}/my-highscores";
+        Debug.Log($"🌐 Lekérés indul: {url}");
+
+        UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.Success)
+        if (request.result != UnityWebRequest.Result.Success)
         {
-            string json = "{\"highscores\":" + request.downloadHandler.text + "}";
-            HighScoreList data = JsonUtility.FromJson<HighScoreList>(json);
+            Debug.LogError("❌ Highscore lekérés hiba: " + request.error);
+            yield break;
+        }
 
-            foreach (var entry in data.highscores)
+        string json = request.downloadHandler.text;
+        Debug.Log("✅ Highscore válasz: " + json);
+
+        MyHighscoreDtoList wrapper = JsonUtility.FromJson<MyHighscoreDtoList>("{\"items\":" + json + "}");
+        List<MyHighscoreDto> highscores = wrapper.items;
+        Debug.Log($"🔢 Sorok száma: {highscores.Count}");
+
+        foreach (Transform child in myHighscoreParent)
+            Destroy(child.gameObject);
+
+        foreach (var hs in highscores)
+        {
+            GameObject row = Instantiate(myHighscoreRowPrefab, myHighscoreParent);
+            Text[] texts = row.GetComponentsInChildren<Text>();
+            if (texts.Length >= 2)
             {
-                // ✅ Sor spawn biztonságosan
-                if (highscoreRowPrefab != null && highscoreContent != null)
-                {
-                    GameObject row = Instantiate(highscoreRowPrefab, highscoreContent);
-                    Text levelText = row.transform.Find("LevelText").GetComponent<Text>();
-                    Text scoreText = row.transform.Find("Score text").GetComponent<Text>();
-
-                    if (levelText != null) levelText.text = entry.levelName;
-                    if (scoreText != null) scoreText.text = entry.highscore.ToString();
-                }
+                texts[0].text = hs.levelName;
+                texts[1].text = hs.highscore.ToString();
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ Prefabban nincs elég Text komponens.");
             }
         }
-        else
-        {
-            Debug.LogError("❌ Failed to load highscores: " + request.error);
-        }
+
+        Debug.Log("✅ Highscore kiírás kész.");
     }
 }

@@ -10,6 +10,8 @@ public class FinishPoint : MonoBehaviour
     public Text feedbackText;
     public GameObject finishPanel;
 
+    private bool hasFinished = false;
+
     void Awake()
     {
         string currentScene = SceneManager.GetActiveScene().name;
@@ -63,20 +65,56 @@ public class FinishPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (hasFinished) return;
+
         if (collision.CompareTag("Player"))
         {
+            hasFinished = true;
+
             if (coinManager == null)
             {
                 coinManager = FindObjectOfType<CoinManager>();
                 Debug.LogWarning("♻️ Újra lekérve a CoinManager, mert NULL volt triggerkor.");
             }
 
-            Debug.Log("🎯 Finish elérve – Highscore küldés indul. Aktuális pont: " + (coinManager != null ? coinManager.coinCount.ToString() : "NULL"));
+            int currentScore = coinManager != null ? coinManager.coinCount : 0;
 
-            if (feedbackText != null)
-                feedbackText.text = "🎉 Congratulations!";
+            if (finishPanel != null)
+            {
+                finishPanel.SetActive(true);
 
+                if (feedbackText != null)
+                {
+                    feedbackText.text = "🎉 Gratulálok!\nPontszámod: " + currentScore;
+                }
+            }
+
+            DisablePlayerMovement();
+
+            Debug.Log("🎯 Finish elérve – Highscore küldés indul. Aktuális pont: " + currentScore);
             StartCoroutine(CheckAndSubmitHighScore());
+        }
+    }
+
+    void DisablePlayerMovement()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            var movement = player.GetComponent<Move>();
+            if (movement != null)
+            {
+                movement.enabled = false;
+                Debug.Log("⛔ Játékos mozgás letiltva.");
+            }
+
+            var rb = player.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.bodyType = RigidbodyType2D.Static;
+                Debug.Log("🧊 Rigidbody2D letiltva (Static).");
+            }
         }
     }
 
@@ -155,8 +193,6 @@ public class FinishPoint : MonoBehaviour
 
             if (finishPanel != null)
             {
-                finishPanel.SetActive(true);
-
                 if (feedbackText != null)
                 {
                     feedbackText.text = "🎉 Szép munka!\nPontszámod: " + currentScore;
@@ -169,15 +205,6 @@ public class FinishPoint : MonoBehaviour
                         feedbackText.text += "\n🆕 Ez az első highscore ezen a pályán!";
                     }
                 }
-
-                yield return new WaitForSeconds(3f);
-                SceneManager.LoadScene("LevelSelectScene");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ Nincs FinishPanel beállítva – fallback visszadobás");
-                yield return new WaitForSeconds(2f);
-                SceneManager.LoadScene("LevelSelectScene");
             }
         }
         else
@@ -185,6 +212,30 @@ public class FinishPoint : MonoBehaviour
             Debug.LogError("❌ Highscore küldés hiba: " + request.error);
             Debug.LogError(request.downloadHandler.text);
         }
+    }
+
+    public void OnNextLevelButtonPressed()
+    {
+        int currentIndex = SceneManager.GetActiveScene().buildIndex;
+
+        if (currentIndex == 11)
+        {
+            SceneManager.LoadScene(3);
+        }
+        else if (currentIndex + 1 < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(currentIndex + 1);
+        }
+        else
+        {
+            Debug.Log("⚠️ Nincs több pálya, vissza a menübe.");
+            SceneManager.LoadScene("LevelSelectScene");
+        }
+    }
+
+    public void OnMenuButtonPressed()
+    {
+        SceneManager.LoadScene("LevelSelectScene");
     }
 
     [System.Serializable]

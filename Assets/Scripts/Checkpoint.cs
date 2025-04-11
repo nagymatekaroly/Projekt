@@ -6,7 +6,6 @@ public class Checkpoint : MonoBehaviour
     public Transform respawnPoint;
 
     private SpriteRenderer spriteRenderer;
-    public Sprite passive, active;
     private Collider2D coll;
 
     private void Awake()
@@ -26,15 +25,10 @@ public class Checkpoint : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-           
             if (gameController != null)
             {
                 gameController.UpdateCheckpoint(respawnPoint.position);
-            }
-
-            // Ha nem akarsz aktív-passzív animációt:
-            // spriteRenderer.sprite = active;
-            // coll.enabled = false;
+            }      
         }
     }
 }
