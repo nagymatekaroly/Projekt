@@ -1091,7 +1091,7 @@ GameObject:
   - component: {fileID: 1647379925}
   - component: {fileID: 1647379924}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: HighScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1124,7 +1124,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 4
     m_MaxSize: 42
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -1170,7 +1170,7 @@ GameObject:
   - component: {fileID: 1759898455}
   - component: {fileID: 1759898454}
   m_Layer: 0
-  m_Name: Idle 0
+  m_Name: Skipper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1404,13 +1404,13 @@ PrefabInstance:
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 326733315}
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1419,17 +1419,22 @@ PrefabInstance:
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelHighscores
+      value: LoadPlayerScore
       objectReference: {fileID: 0}
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HighscoreManager, Assembly-CSharp
+      value: HighscoreUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level 2
       objectReference: {fileID: 0}
     - target: {fileID: 1539278831519419042, guid: bdbd01da182cd7e46bcff075faaf35b8,
         type: 3}
@@ -1562,13 +1567,13 @@ PrefabInstance:
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 326733315}
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1577,17 +1582,22 @@ PrefabInstance:
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelHighscores
+      value: LoadPlayerScore
       objectReference: {fileID: 0}
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HighscoreManager, Assembly-CSharp
+      value: HighscoreUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level 1
       objectReference: {fileID: 0}
     - target: {fileID: 3649996883124880181, guid: c69cffca91cb1f24b835fde25364370f,
         type: 3}
@@ -1825,13 +1835,13 @@ PrefabInstance:
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 326733315}
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1840,17 +1850,22 @@ PrefabInstance:
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelHighscores
+      value: LoadPlayerScore
       objectReference: {fileID: 0}
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HighscoreManager, Assembly-CSharp
+      value: HighscoreUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level 3
       objectReference: {fileID: 0}
     - target: {fileID: 8427121033138937201, guid: d06b396ed94b47942902132907f1933d,
         type: 3}
@@ -1883,13 +1898,13 @@ PrefabInstance:
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 326733315}
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -1898,17 +1913,22 @@ PrefabInstance:
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelHighscores
+      value: LoadPlayerScore
       objectReference: {fileID: 0}
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HighscoreManager, Assembly-CSharp
+      value: HighscoreUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level 4
       objectReference: {fileID: 0}
     - target: {fileID: 3963066595551686239, guid: 95c42470497154e4c84b870ed14b9a1f,
         type: 3}
@@ -2041,13 +2061,13 @@ PrefabInstance:
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 326733315}
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -2056,17 +2076,22 @@ PrefabInstance:
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadLevelHighscores
+      value: LoadPlayerScore
       objectReference: {fileID: 0}
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HighscoreManager, Assembly-CSharp
+      value: HighscoreUIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: Level 5
       objectReference: {fileID: 0}
     - target: {fileID: 4543283425862314517, guid: 6c3a46a07e5efd24c8d9769f1da88232,
         type: 3}

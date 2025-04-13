@@ -23,18 +23,52 @@ public class CoinManager : MonoBehaviour
             else
             {
                 Destroy(gameObject);
+                return;
             }
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("📦 Új scene betöltve: " + scene.name);
+
+        if (scene.name.StartsWith("Level") || scene.name == "Tutorial")
+        {
+            ResetCoins();
+            Debug.Log("🔁 Coin count nullázva a scene betöltése után.");
+        }
+
+        // CoinText újracsatolása, ha elveszett volna
+        if (coinText == null)
+        {
+            GameObject found = GameObject.Find("CoinCount");
+            if (found != null)
+            {
+                coinText = found.GetComponent<Text>();
+                Debug.Log("✅ CoinText újracsatolva scene betöltés után.");
+            }
+        }
+
+        UpdateText();
     }
 
     void Start()
     {
-        coinCount = 0;
-
         if (coinText == null)
         {
             GameObject found = GameObject.Find("CoinCount");

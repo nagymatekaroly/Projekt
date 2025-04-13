@@ -1163,7 +1163,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 678.079, y: 277.957}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &638907647
@@ -1783,7 +1783,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 152.49275, y: -64.60025}
+  m_AnchoredPosition: {x: 152.49274, y: -64.60025}
   m_SizeDelta: {x: 304.9855, y: 129.2005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &873758676
@@ -3665,9 +3665,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1942841758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80043c10a32220b41a76adc25b005557, type: 3}
+  m_Script: {fileID: 11500000, guid: fbe1f1e029ee362439e85be35087b19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 9419177}
 --- !u!4 &1942841760
 Transform:
   m_ObjectHideFlags: 0
@@ -4367,6 +4368,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 720271542}
   m_SourcePrefab: {fileID: 100100000, guid: 8cab4944c5b9efa448f7be8f76e7e7c9, type: 3}
+--- !u!20 &5719539929856355200 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8981702449102161318, guid: 8cab4944c5b9efa448f7be8f76e7e7c9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5719539929856355199}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7848355042764927676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4565,7 +4572,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5719539929856355200}
     - target: {fileID: 5655105811733451278, guid: 005a1471d4452e747be58de51e5d8703,
         type: 3}
       propertyPath: m_SortingOrder
