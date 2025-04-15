@@ -23,6 +23,11 @@ public class FinishPoint : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("CoinManager állapot a FinishPointban: " + (coinManager != null ? "OK" : "NULL"));
+        if (coinManager != null)
+            Debug.Log("Aktuális pont: " + coinManager.coinCount);
+
+        hasFinished = false; // ✅ Reseteljük újraindításkor
         StartCoroutine(FindCoinManagerAfterDelay());
     }
 
@@ -38,11 +43,11 @@ public class FinishPoint : MonoBehaviour
 
             if (coinManager == null)
             {
-                Debug.LogError("❌ CoinManager továbbra is NULL a FinishPointban!");
+                Debug.LogError("CoinManager továbbra is NULL a FinishPointban!");
             }
             else
             {
-                Debug.Log("✅ CoinManager megtalálva a FinishPoint által.");
+                Debug.Log("CoinManager megtalálva a FinishPoint által.");
 
                 if (coinManager.coinText == null)
                 {
@@ -50,11 +55,11 @@ public class FinishPoint : MonoBehaviour
                     if (found != null)
                     {
                         coinManager.coinText = found.GetComponent<Text>();
-                        Debug.Log("✅ CoinText automatikusan megtalálva a FinishPoint által.");
+                        Debug.Log("CoinText automatikusan megtalálva a FinishPoint által.");
                     }
                     else
                     {
-                        Debug.LogWarning("⚠️ CoinText nem található!");
+                        Debug.LogWarning("CoinText nem található!");
                     }
                 }
 
@@ -65,19 +70,22 @@ public class FinishPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (hasFinished) return;
+        if (hasFinished) return; // ✅ Ne fusson le többször
 
         if (collision.CompareTag("Player"))
         {
-            hasFinished = true;
+            hasFinished = true; // ✅ Csak egyszer aktiválódjon
 
             if (coinManager == null)
             {
                 coinManager = FindObjectOfType<CoinManager>();
-                Debug.LogWarning("♻️ Újra lekérve a CoinManager, mert NULL volt triggerkor.");
+                Debug.Log("CoinManager újra lekérve triggerkor.");
             }
 
-            int currentScore = coinManager != null ? coinManager.coinCount : 0;
+            int currentScore = (coinManager != null) ? coinManager.coinCount : -1;
+
+            Debug.Log("CoinManager állapota: " + (coinManager != null ? "OK" : "NULL"));
+            Debug.Log("Finish elérve – Aktuális pont: " + currentScore);
 
             if (finishPanel != null)
             {
@@ -85,13 +93,17 @@ public class FinishPoint : MonoBehaviour
 
                 if (feedbackText != null)
                 {
-                    feedbackText.text = "🎉 Gratulálok!\nPontszámod: " + currentScore;
+                    if (currentScore >= 0)
+                    {
+                        feedbackText.text = $"Gratulálok!\nPontszámod: {currentScore}";
+                    }
+                    else
+                    {
+                        feedbackText.text = $"Nem sikerült betölteni a pontszámot!";
+                    }
                 }
             }
 
-            DisablePlayerMovement();
-
-            Debug.Log("🎯 Finish elérve – Highscore küldés indul. Aktuális pont: " + currentScore);
             StartCoroutine(CheckAndSubmitHighScore());
         }
     }
@@ -105,7 +117,7 @@ public class FinishPoint : MonoBehaviour
             if (movement != null)
             {
                 movement.enabled = false;
-                Debug.Log("⛔ Játékos mozgás letiltva.");
+                Debug.Log("Játékos mozgás letiltva.");
             }
 
             var rb = player.GetComponent<Rigidbody2D>();
@@ -125,7 +137,7 @@ public class FinishPoint : MonoBehaviour
             coinManager = FindObjectOfType<CoinManager>();
             if (coinManager == null)
             {
-                Debug.LogError("❌ CoinManager nem található még mindig – highscore megszakítva.");
+                Debug.LogError("CoinManager nem található még mindig – highscore megszakítva.");
                 yield break;
             }
         }
@@ -145,16 +157,16 @@ public class FinishPoint : MonoBehaviour
             {
                 HighscoreCheckDto dto = JsonUtility.FromJson<HighscoreCheckDto>(json);
                 previousScore = dto.highscoreValue;
-                Debug.Log("📊 Előző pontszám: " + previousScore);
+                Debug.Log("Előző pontszám: " + previousScore);
             }
             else
             {
-                Debug.Log("📭 Még nincs highscore ehhez a pályához.");
+                Debug.Log("Még nincs highscore ehhez a pályához.");
             }
         }
         else
         {
-            Debug.LogWarning("⚠️ Hiba a korábbi highscore lekérésénél: " + getRequest.error);
+            Debug.LogWarning("Hiba a korábbi highscore lekérésénél: " + getRequest.error);
         }
 
         StartCoroutine(SubmitHighScore(currentScore, previousScore));
@@ -166,7 +178,7 @@ public class FinishPoint : MonoBehaviour
 
         if (coinManager == null)
         {
-            Debug.LogError("❌ CoinManager nincs beállítva a FinishPointban!");
+            Debug.LogError("CoinManager nincs beállítva a FinishPointban!");
             yield break;
         }
 
@@ -189,27 +201,24 @@ public class FinishPoint : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log("✅ Highscore elküldve! Válasz: " + request.downloadHandler.text);
+            Debug.Log("Highscore elküldve! Válasz: " + request.downloadHandler.text);
 
-            if (finishPanel != null)
+            if (finishPanel != null && feedbackText != null)
             {
-                if (feedbackText != null)
+                feedbackText.text = "Szép munka!\nPontszámod: " + currentScore;
+                if (previousScore >= 0 && currentScore > previousScore)
                 {
-                    feedbackText.text = "🎉 Szép munka!\nPontszámod: " + currentScore;
-                    if (previousScore >= 0 && currentScore > previousScore)
-                    {
-                        feedbackText.text += "\n🔥 ÚJ REKORD! Te vagy a király ezen a pályán!";
-                    }
-                    else if (previousScore == -1)
-                    {
-                        feedbackText.text += "\n🆕 Ez az első highscore ezen a pályán!";
-                    }
+                    feedbackText.text += "\nÚJ REKORD! Te vagy a király ezen a pályán!";
+                }
+                else if (previousScore == -1)
+                {
+                    feedbackText.text += "\nEz az első highscore ezen a pályán!";
                 }
             }
         }
         else
         {
-            Debug.LogError("❌ Highscore küldés hiba: " + request.error);
+            Debug.LogError("Highscore küldés hiba: " + request.error);
             Debug.LogError(request.downloadHandler.text);
         }
     }
@@ -228,7 +237,7 @@ public class FinishPoint : MonoBehaviour
         }
         else
         {
-            Debug.Log("⚠️ Nincs több pálya, vissza a menübe.");
+            Debug.Log("Nincs több pálya, vissza a menübe.");
             SceneManager.LoadScene("LevelSelectScene");
         }
     }

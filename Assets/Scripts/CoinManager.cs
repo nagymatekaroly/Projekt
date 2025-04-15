@@ -6,84 +6,61 @@ public class CoinManager : MonoBehaviour
 {
     public static CoinManager instance;
 
-    public int coinCount;
+    public int coinCount = 0;
     public Text coinText;
 
     void Awake()
     {
-        if (instance == null)
+        if (instance != null && instance != this)
         {
-            string sceneName = SceneManager.GetActiveScene().name;
-            if (sceneName.StartsWith("Level") || sceneName == "Tutorial")
-            {
-                instance = this;
-                DontDestroyOnLoad(gameObject);
-                Debug.Log("✅ CoinManager beállítva.");
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
-            }
-        }
-        else
-        {
+            Debug.LogWarning("⚠️ Dupla CoinManager detektálva. Régi példány törölve.");
             Destroy(gameObject);
             return;
         }
-    }
 
-    void OnEnable()
-    {
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        Debug.Log("✅ CoinManager beállítva.");
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void OnDisable()
+    void Start()
+    {
+        SetupText();
+        UpdateText();
+    }
+
+    private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("📦 Új scene betöltve: " + scene.name);
+        Debug.Log("🔁 Pálya betöltve: " + scene.name);
 
-        if (scene.name.StartsWith("Level") || scene.name == "Tutorial")
-        {
-            ResetCoins();
-            Debug.Log("🔁 Coin count nullázva a scene betöltése után.");
-        }
+        // Minden pályabetöltéskor nullázzuk
+        coinCount = 0;
 
-        // CoinText újracsatolása, ha elveszett volna
-        if (coinText == null)
-        {
-            GameObject found = GameObject.Find("CoinCount");
-            if (found != null)
-            {
-                coinText = found.GetComponent<Text>();
-                Debug.Log("✅ CoinText újracsatolva scene betöltés után.");
-            }
-        }
-
+        // Új UI-ra rákötés
+        SetupText();
         UpdateText();
+
+        Debug.Log("🔄 Coin resetelve, text frissítve.");
     }
 
-    void Start()
+    void SetupText()
     {
         if (coinText == null)
         {
-            GameObject found = GameObject.Find("CoinCount");
-            if (found != null)
+            GameObject textObj = GameObject.Find("CoinCount");
+            if (textObj != null)
             {
-                coinText = found.GetComponent<Text>();
-                Debug.Log("✅ CoinText automatikusan megtalálva.");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ CoinText nem található!");
+                coinText = textObj.GetComponent<Text>();
+                Debug.Log("✅ CoinText megtalálva.");
             }
         }
-
-        UpdateText();
     }
 
     public void AddCoin(int amount)
@@ -104,5 +81,6 @@ public class CoinManager : MonoBehaviour
     {
         coinCount = 0;
         UpdateText();
+        Debug.Log("🧹 CoinManager: Pontszám nullázva.");
     }
 }
